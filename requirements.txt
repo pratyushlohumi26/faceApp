@@ -41,13 +41,7 @@ Keras-Preprocessing==1.0.5
 kiwisolver==1.1.0
 librosa==0.6.1
 llvmlite==0.28.0
-Markdown==3.1.1
-MarkupSafe==1.1.1
 matplotlib==3.0.3
-mistune==0.8.4
-mpi4py==3.0.1
-nbconvert==5.5.0
-nbformat==4.4.0
 notebook==5.7.8
 numpy==1.14.5
 opencv-python==4.2.0.32
@@ -58,12 +52,6 @@ pbr==5.4.0
 pexpect==4.6.0
 pickleshare==0.7.5
 Pillow>=5.4.1
-portpicker==1.3.1
-prometheus-client==0.7.1
-prompt-toolkit==2.0.9
-protobuf==3.9.0
-psutil>=5.6.6
-ptyprocess==0.6.0
 QtPy==1.9.0
 resampy==0.2.1
 sacrebleu==1.2.20
@@ -75,7 +63,7 @@ Send2Trash==1.5.0
 sentencepiece==0.1.6
 six==1.12.0
 tensorboard>=1.14.0
-tensorflow-estimator>=1.14.0
+tensorflow-estimator==1.14.0
 tensorflow==1.14.0
 termcolor==1.1.0
 terminado==0.8.2
