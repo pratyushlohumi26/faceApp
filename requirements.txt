@@ -16,10 +16,7 @@ Flask-RESTful==0.3.8
 future==0.17.1
 gast==0.2.2
 google-pasta==0.1.7
-graphsurgeon==0.4.1
-grpcio==1.22.0
 h5py==2.9.0
-horovod==0.16.2
 ipykernel==5.1.1
 ipython==7.6.1
 ipython-genutils==0.2.0
@@ -48,13 +45,10 @@ Markdown==3.1.1
 MarkupSafe==1.1.1
 matplotlib==3.0.3
 mistune==0.8.4
-mock==2.0.0
 mpi4py==3.0.1
 nbconvert==5.5.0
 nbformat==4.4.0
-nltk>=3.2.5
 notebook==5.7.8
-numba==0.43.0
 numpy==1.14.5
 opencv-python==4.2.0.32
 pandas==0.23.0
