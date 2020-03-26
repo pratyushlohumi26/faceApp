@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+ <div class="login">
+	<h1>Facial Recognition</h1>
+
+     
+    
+    <form action="/upload" method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+
+    <form action="{{ url_for('predict_path')}}"method="post">
+    	<button style="margin-top: 17px;" type="submit" class="btn btn-primary btn-block btn-large">Predict-Path</button>
+    </form>
+    <form action="{{ url_for('predict_img')}}"method="post">
+    	<button style="margin-top: 17px;" type="submit" class="btn btn-primary btn-block btn-large">Predict-Uploaded</button>
+    </form>
+    <!-- <h1 style="color: aliceblue;">Streaming </h1>
+    <img src="{{ url_for('predict_img') }}"> -->
+   <br>
+   <br>
+   <p style="color: aliceblue;">
+    {{ imagepath }}
+    </p>
+    
+   <p style="color: aliceblue;">
+   {{ prediction_text_path }}
+   </p>
+
+   <p style="margin-top: 70px; color: aliceblue;">
+    {{ prediction_text_img }}
+    </p>
+    
+     
+ </div>
+
+
+</body>
+</html>
