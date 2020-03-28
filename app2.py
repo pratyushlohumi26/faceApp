@@ -160,14 +160,5 @@ def predict_img():
     
     return render_template('index.html', prediction_text_img='Face Recognized for: {}'.format(max_label))
 
-@app.route("/test")
-def test():
-    return jsonify({"about":"WHat Up !!"})
-
-@app.route('/test_mul10/<int:num>', methods=['GET'])
-def test_mul10():
-    return jsonify({'result' : num*10})
-
-
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, threaded=False)

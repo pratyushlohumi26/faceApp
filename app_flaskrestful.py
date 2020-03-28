@@ -1,5 +1,5 @@
 import numpy as np
-from flask import Flask, request, jsonify, render_template, flash, redirect
+from flask import Flask, request, jsonify, render_template, flash, redirect, make_response
 from flask_restful import Resource, reqparse, Api
 from flask_cors import CORS
 import cv2
@@ -26,43 +26,47 @@ UPLOAD_FOLDER = '/workspace/pl/Attendance-using-Face-master/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 api = Api(app)
-def load_kmodel():
-    model=load_model('face_reco_10.MODEL')
-    # model.compile(optimizer = 'adam', loss='categorical_crossentropy')
-    return model
+model=load_model('face_reco_10.MODEL')
+class basic_render(Resource):
+    # @app.route('/')
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('index.html'), 200, headers)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
-@app.route('/upload',methods = ['GET','POST'])
-def upload():
-    if request.method == 'POST':  
+class upload(Resource):
+    # @app.route('/upload',methods = ['GET','POST'])
+    def post(self):
+        # if request.method == 'POST':  
         f = request.files['file']  
         # f.save(f.filename)
         # filename = secure_filename(f.filename)
         f.save(os.path.join(UPLOAD_FOLDER, f.filename))
         # img = cv2.imread(f)
         imagePath = os.path.join(UPLOAD_FOLDER, f.filename)
-        return render_template("index.html", imagepath = imagePath)
+        # return make_response(render_template('index.html'), imagepath = imagePath)
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("index.html", imagepath = imagePath),headers)
+        # return render_template("index.html", imagepath = imagePath)
 
-@app.route('/predict_path',methods=['POST'])
-def predict_path():
-    '''
-    For rendering results on HTML GUI
-    '''
-    e=emb()
-    all_labels = []
-    max_label=[]
-    #fd=face()
-    label=None
-    a = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}
-    #b={0:1188, 1:1184, 2:213, 3:1142, 4:1149,  5:515, 6:44, 7:969, 8:1164, 9:1059 }
-    ids={"Kritika":"1188","Anuja":"1184","Nagesh":"213","Amar":"1142", "Manish":"1149", "Pratyush":"11", "Naveen":"044", "Pankaj":"969", "Shelly":"1164","Vikas":"1059"}
-    people = {0:'Naveen',1:'Vikas',2:'Pratyush',3:'Amar',4:'Manish',5:'Shelly',6:'Anuja',7:'Kritika',8:'Nagesh',9:'Anurag',10:'Pankaj'}
-    
-    if request.method == 'POST':
+class predict_path(Resource):
+    # def load_kmodel():
+        
+        # model.compile(optimizer = 'adam', loss='categorical_crossentropy')
+        # return model    
+    # @app.route('/predict_path',methods=['POST'])
+    def get(self):
+        
+        e=emb()
+        all_labels = []
+        max_label=[]
+        #fd=face()
+        label=None
+        a = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}
+        #b={0:1188, 1:1184, 2:213, 3:1142, 4:1149,  5:515, 6:44, 7:969, 8:1164, 9:1059 }
+        ids={"Kritika":"1188","Anuja":"1184","Nagesh":"213","Amar":"1142", "Manish":"1149", "Pratyush":"11", "Naveen":"044", "Pankaj":"969", "Shelly":"1164","Vikas":"1059"}
+        people = {0:'Naveen',1:'Vikas',2:'Pratyush',3:'Amar',4:'Manish',5:'Shelly',6:'Anuja',7:'Kritika',8:'Nagesh',9:'Anurag',10:'Pankaj'}
+        
+        # if request.method == 'POST':
         new_people=os.listdir('new_people')
         print(new_people)
         for x in new_people:
@@ -77,7 +81,7 @@ def predict_path():
                 # image = cv2.imread('/workspace/pl/Attendance-using-Face-master/new-people/Nagesh_213/1.jpg')
                 feed=e.calculate(img)
                 feed=np.expand_dims(feed,axis=0)
-                model = load_kmodel()
+                # model = predict_path.load_kmodel()
                 prediction=model.predict(feed)[0]
                 result=int(np.argmax(prediction))
                 if(np.max(prediction)>.9):
@@ -100,26 +104,29 @@ def predict_path():
             print(all_labels, res)
             all_labels=[]
             max_label.append(res)
-    print(max_label)
-    
-    return render_template('index.html', prediction_text_path='Face Recognized for: {}'.format(max_label))
+        print(max_label)
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("index.html", prediction_text_path='Face Recognized for: {}'.format(max_label)),201,headers)
+        # return make_response(render_template("index.html", profile=user_info, repos=repos), 200, headers)
+        # return {'Face Recognized : ' : max_label }
 
-@app.route('/predict_img',methods=['POST'])
-def predict_img():
-    '''
-    For rendering results on HTML GUI
-    '''
-    e=emb()
-    all_labels = []
-    max_label=[]
-    #fd=face()
-    label=None
-    a = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}
-    #b={0:1188, 1:1184, 2:213, 3:1142, 4:1149,  5:515, 6:44, 7:969, 8:1164, 9:1059 }
-    ids={"Kritika":"1188","Anuja":"1184","Nagesh":"213","Amar":"1142", "Manish":"1149", "Pratyush":"11", "Naveen":"044", "Pankaj":"969", "Shelly":"1164","Vikas":"1059"}
-    people = {0:'Naveen',1:'Vikas',2:'Pratyush',3:'Amar',4:'Manish',5:'Shelly',6:'Anuja',7:'Kritika',8:'Nagesh',9:'Anurag',10:'Pankaj'}
-    
-    if request.method == 'POST':
+class predict_upload(Resource):
+    # @app.route('/predict_img',methods=['POST'])
+    def get(self):
+        '''
+        For rendering results on HTML GUI
+        '''
+        e=emb()
+        all_labels = []
+        max_label=[]
+        #fd=face()
+        label=None
+        a = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0}
+        #b={0:1188, 1:1184, 2:213, 3:1142, 4:1149,  5:515, 6:44, 7:969, 8:1164, 9:1059 }
+        ids={"Kritika":"1188","Anuja":"1184","Nagesh":"213","Amar":"1142", "Manish":"1149", "Pratyush":"11", "Naveen":"044", "Pankaj":"969", "Shelly":"1164","Vikas":"1059"}
+        people = {0:'Naveen',1:'Vikas',2:'Pratyush',3:'Amar',4:'Manish',5:'Shelly',6:'Anuja',7:'Kritika',8:'Nagesh',9:'Anurag',10:'Pankaj'}
+        
+        # if request.method == 'POST':
         uploads=os.listdir('uploads')
         print(uploads)
         for i in os.listdir('uploads/'):
@@ -133,7 +140,7 @@ def predict_img():
             # image = cv2.imread('/workspace/pl/Attendance-using-Face-master/new-people/Nagesh_213/1.jpg')
             feed=e.calculate(img)
             feed=np.expand_dims(feed,axis=0)
-            model = load_kmodel()
+            # model = predict_path.load_kmodel()
             prediction=model.predict(feed)[0]
             result=int(np.argmax(prediction))
             if(np.max(prediction)>.9):
@@ -156,18 +163,28 @@ def predict_img():
         print(all_labels, res)
         all_labels=[]
         max_label.append(res)
-    print(max_label)
-    
-    return render_template('index.html', prediction_text_img='Face Recognized for: {}'.format(max_label))
+        print(max_label)
+        headers = {'Content-Type': 'text/html'}
+        # return {'Face Recognized : ' : max_label }
+        return make_response(render_template('index.html', prediction_text_upload='Face Recognized for: {}'.format(max_label)),201,headers)
 
-@app.route("/test")
-def test():
-    return jsonify({"about":"WHat Up !!"})
+class test(Resource):    
+    # @app.route("/test")
+    def get(self):
+        return jsonify({"about":"WHat Up !!"})
 
-@app.route('/test_mul10/<int:num>', methods=['GET'])
-def test_mul10():
-    return jsonify({'result' : num*10})
+class test_mul10(Resource):    
+    # @app.route('/test_mul10/<int:num>', methods=['GET'])
+    def get(self,num):
+        return jsonify({'result' : num*10})
 
+api.add_resource(basic_render,'/')
+api.add_resource(upload, '/api/v1/upload')
+api.add_resource(predict_path, '/api/v1/predict_path')
+api.add_resource(predict_upload, '/api/v1/predict_upload')
+api.add_resource(test, '/api/v1/test')
+api.add_resource(test_mul10, '/api/v1/test_mul10/<int:num>')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, threaded=False)
+    
