@@ -186,5 +186,5 @@ api.add_resource(test, '/api/v1/test')
 api.add_resource(test_mul10, '/api/v1/test_mul10/<int:num>')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, threaded=False)
+    app.run(debug=True, threaded=False)
     
